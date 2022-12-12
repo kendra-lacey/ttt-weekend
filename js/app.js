@@ -36,9 +36,12 @@ let board, turn, winner, tie
 
 //  In a constant called `messageEl`, store the element that displays the 
 //    game's status on the page.
+//  Attach an event listener to the game board
 
 const squareEls = document.querySelectorAll('.sqr')
 const messageEl = "Player " + winner + " Wins!"
+
+document.querySelector('.board').addEventListener('click', handleClick)
 
 /*----------------------------- Event Listeners -----------------------------*/
 
@@ -66,6 +69,8 @@ function init(){
 //  - The state of the game should be rendered to the user
 
 //  Create a function called `render`, then set it aside for now.
+//  Invoke both the `updateBoard` and the `updateMessage` functions
+// inside of your `render` function.
 function render(){
 updateBoard()
 updateMessage()
@@ -111,53 +116,92 @@ function updateMessage() {
   return message
 }
 
+//   Handle a player clicking a square with a `handleClick` function
+//   Create a function called `handleClick`. It will have an `evt` parameter
+//   Obtain the index of the square that was clicked by "extracting" the 
+//   index from an `id` assigned to the target element in the HTML. Assign 
+//   this to a constant called `sqIdx`.
 
-//  Invoke both the `updateBoard` and the `updateMessage` functions
-// inside of your `render` function.
-
-
-
-// Step 6 - Handle a player clicking a square with a `handleClick` function
-
-// 6a) Create a function called `handleClick`. It will have an `evt`
-//     parameter.
-
-// 6b) Attach an event listener to the game board (you can do this to each
-//     one of the existing `squareEls` with a `forEach` loop OR add a new
-//     cached element reference that will allow you to take advantage of 
-//     event bubbling). On the `'click'` event, it should call the 
-//    `handleClick` function you created in 6a.
-
-// 6c) Obtain the index of the square that was clicked by "extracting" the 
-//     index from an `id` assigned to the target element in the HTML. Assign 
-//     this to a constant called `sqIdx`.
-
-// 6d) If the `board` has a value at the `sqIdx`, immediately `return`  
-//     because that square is already taken. Also, if `winner` is not `null`
-//     immediately `return` because the game is over.
-
+//  If the `board` has a value at the `sqIdx`, immediately `return`  
+//  because that square is already taken. Also, if `winner` is not `null`
+//  immediately `return` because the game is over.
+function handleClick (evt){ // this runs anytime a single square is clicked
+  const sqIdx = evt.target.id.replace("sq", "")
+  console.log(sqIdx)
+  console.log(board)
+  console.log(winner)
+  console.log(turn)
+  if (board[(sqIdx)] !== null) { // if it already has an x or an o in it, do nothing
+    console.log("There's already something in that box")
+    return // do nothing
+  } else if (winner === true) { // if there's already a winner, do nothing
+    console.log("winner square")
+    return // do nothing
+  } else {
+    placePiece (sqIdx) //tell placePiece to change the box at this index
+    return
+  }
+}
 
 // Step 6.1 - `placePiece`
 
-// 6.1a) Create a function named placePiece that accepts an `idx` parameter.
-
-// 6.1b) Update the `board` array at the `idx` so that it is equal to the 
+//  Create a function named placePiece that accepts an `idx` parameter.
+//  Update the `board` array at the `idx` so that it is equal to the 
 //       current value of `turn`.
 
+function placePiece (idx){
+  if(turn === 0){
+    board[(idx)] = 'x' // change board at this index to x because it's player 0's turn
+  }else if(turn === 1){
+    board[(idx)] = 'o' // change board at this index to x because it's player 1's turn
+  }
+}
 
-// 6.2 - `checkForTie`
-
-// 6.2a) Create a function named `checkForTie`.
-
-// 6.2b) Check if the `board` array still contains any `null` elements. If
-//       it does, we can leave `tie` as false. Otherwise, set `tie` to true.
 
 
-// 6.3 - `checkForWinner`
+// - `checkForTie`
 
-// 6.3a) Create a function called `checkForWinner`
+// Create a function named `checkForTie`.
+//  Check if the `board` array still contains any `null` elements. If
+//  it does, we can leave `tie` as false. Otherwise, set `tie` to true.
 
-// 6.3b) Determine if a player has won using one of the two options below.
+function checkForTie(){
+  board.forEach((sqr) => { //if any of the squares are null, it is not a tie
+    if (sqr === null){ //checking if board array contains null elements
+      return
+    }
+  })
+  tie = True // if the above foreach runs, and none of the squares are null -- then it is a tie
+}
+
+
+//
+console.log(winningCombos)
+
+//  - `checkForWinner`
+//  Create a function called `checkForWinner`
+function checkForWinner(){
+  //loop throughwinningCombos combo = [2,4,6]
+  winningCombos.forEach((combo) => { // loop through each of the winning combos. it will do this eight times.
+    comboTotal=0 // will track positions
+    combo.forEach((position) => { // this is only going to cycle three times. because each combo only has three elements
+      if(board[(position)] === 'x') { // if the board at that location is equal to x
+       comboTotal += 1 // add +1 to the tracker
+      } else if(board[(position)] === 'o'){ // if the board at that location is equal to o
+       comboTotal -= 1 // subtract -1 to the tracker
+      }
+    })
+    // so if we have three x's on the board at the three locations of this winning combo, we would have 3. If we have three o's, the tracker would equal -3. If we have a mix we'd get a different number like -2, -1, 1, 2
+    if (comboTotal === 3){
+      return 'x wins'
+    } else if (comboTotal === -3){
+      return 'o wins'
+    }
+  })
+}
+
+
+//  Determine if a player has won using one of the two options below.
 //       Option 1 is a more elegant method that takes advantage of the 
 //       `winningCombos` array you wrote above in step 5. Option 2 might 
 //       be a little simpler to comprehend, but you'll need to write more 
