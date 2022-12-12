@@ -40,7 +40,6 @@ let board, turn, winner, tie
 
 const squareEls = document.querySelectorAll('.sqr')
 const messageEl = "Player " + winner + " Wins!"
-// const resetBtnEl = document.getElementById("reset")
 
 
 /*----------------------------- Event Listeners -----------------------------*/
@@ -76,9 +75,9 @@ function init(){
 //  Invoke both the `updateBoard` and the `updateMessage` functions
 // inside of your `render` function.
 function render(){
-updateBoard()
-updateMessage()
-// reset()
+  updateBoard()
+  updateMessage()
+  messageEl.add('animate__animated', 'animate__heartBeat')
 }
 
 //  Create a function called `updateBoard`.
@@ -94,9 +93,9 @@ function updateBoard(){
   console.log("Called updateBoard()")
   board.forEach((element, index) => {
     if (element === 'x'){
-      squareEls[index].textContent = 'x'
+      squareEls[index].textContent = '❌' 
     }else if (element === 'o'){
-      squareEls[index].textContent = 'o'
+      squareEls[index].textContent = '⭕️'
     } else {
       squareEls[index].textContent = ''
     }
@@ -117,7 +116,7 @@ function updateMessage() {
   if(winner === false && tie === false){
     message = "It is player " + turn + "'s turn."
   } else if (winner === false && tie === true){
-    message = 'Tie Game aka cats game Mee-OWW'
+    message = 'Tie Game aka cats game Mee-OWW 😸'
   } else {
     message = 'Congratulations, player' + turn + ' WON!'
   }
@@ -279,10 +278,10 @@ function reset(){
 
 //  Add a reset button to the HTML document.
 
-// 7b) Store the new reset button element as a cached element reference in
+//  Store the new reset button element as a cached element reference in
 //     a constant named `resetBtnEl`.
 
-// 7c) Attach an event listener to the `resetBtnEl`. On the `'click'` event
+//  Attach an event listener to the `resetBtnEl`. On the `'click'` event
 
 
 init()
