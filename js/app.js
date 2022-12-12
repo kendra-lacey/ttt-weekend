@@ -60,6 +60,7 @@ document.querySelector('.board').addEventListener('click', handleClick)
 //  Set `tie` to false.
 //  Call a function called `render` at the end of the `init` function.
 function init(){
+  console.log("Called init()")
   board = [null, null, null, null, null, null, null, null, null];
   turn = 1;
   winner = false;
@@ -86,10 +87,11 @@ updateMessage()
 //   `null`). To keep it simple, start with just putting a letter in 
 //    each square depending on what the the value of each cell is.
 function updateBoard(){
+  console.log("Called updateBoard()")
   board.forEach((element, index) => {
-    if (element === 1){
+    if (element === 'x'){
       squareEls[index].textContent = 'x'
-    }else if (element === -1){
+    }else if (element === 'o'){
       squareEls[index].textContent = 'o'
     } else {
       squareEls[index].textContent = ''
@@ -106,14 +108,16 @@ function updateBoard(){
 // - Otherwise, render a congratulatory message to the player that has 
 //   won.
 function updateMessage() {
-  if(`${winner} === false && ${tie} === false`){
+  console.log("Called updateMessage()")
+  console.log("Winner:" + winner)
+  if(winner === false && tie === false){
     message = "It is player " + turn + "'s turn."
-  } else if (`${winner} === false && ${tie} === true`){
-    message = 'Tie Game'
+  } else if (winner === false && tie === true){
+    message = 'Tie Game aka cats game Mee-OWW'
   } else {
     message = 'Congratulations, player' + turn + ' WON!'
   }
-  return message
+  document.getElementById("message").textContent = message
 }
 
 //   Handle a player clicking a square with a `handleClick` function
@@ -126,11 +130,8 @@ function updateMessage() {
 //  because that square is already taken. Also, if `winner` is not `null`
 //  immediately `return` because the game is over.
 function handleClick (evt){ // this runs anytime a single square is clicked
+  console.log("Called Render()")
   const sqIdx = evt.target.id.replace("sq", "")
-  console.log(sqIdx)
-  console.log(board)
-  console.log(winner)
-  console.log(turn)
   if (board[(sqIdx)] !== null) { // if it already has an x or an o in it, do nothing
     console.log("There's already something in that box")
     return // do nothing
@@ -139,6 +140,11 @@ function handleClick (evt){ // this runs anytime a single square is clicked
     return // do nothing
   } else {
     placePiece (sqIdx) //tell placePiece to change the box at this index
+    checkForTie()
+    checkForWinner()
+    switchPlayerTurn()
+    render()
+
     return
   }
 }
@@ -150,7 +156,8 @@ function handleClick (evt){ // this runs anytime a single square is clicked
 //       current value of `turn`.
 
 function placePiece (idx){
-  if(turn === 0){
+  console.log("Called placePiece()")
+  if(turn === -1){
     board[(idx)] = 'x' // change board at this index to x because it's player 0's turn
   }else if(turn === 1){
     board[(idx)] = 'o' // change board at this index to x because it's player 1's turn
@@ -166,24 +173,28 @@ function placePiece (idx){
 //  it does, we can leave `tie` as false. Otherwise, set `tie` to true.
 
 function checkForTie(){
+  console.log("Called checkForTie()")
+  hasNull = false
   board.forEach((sqr) => { //if any of the squares are null, it is not a tie
     if (sqr === null){ //checking if board array contains null elements
-      return
+      hasNull = true
     }
   })
-  tie = True // if the above foreach runs, and none of the squares are null -- then it is a tie
+  if (hasNull === true){
+    return
+  } else {
+    tie = true 
+  }
+  // if the above foreach runs, and none of the squares are null -- then it is a tie
 }
-
-
-//
-console.log(winningCombos)
 
 //  - `checkForWinner`
 //  Create a function called `checkForWinner`
 function checkForWinner(){
+  console.log("Called checkForWinner()")
   //loop throughwinningCombos combo = [2,4,6]
   winningCombos.forEach((combo) => { // loop through each of the winning combos. it will do this eight times.
-    comboTotal=0 // will track positions
+    comboTotal = 0 // will track positions
     combo.forEach((position) => { // this is only going to cycle three times. because each combo only has three elements
       if(board[(position)] === 'x') { // if the board at that location is equal to x
        comboTotal += 1 // add +1 to the tracker
@@ -193,9 +204,11 @@ function checkForWinner(){
     })
     // so if we have three x's on the board at the three locations of this winning combo, we would have 3. If we have three o's, the tracker would equal -3. If we have a mix we'd get a different number like -2, -1, 1, 2
     if (comboTotal === 3){
-      return 'x wins'
+      winner = true
+      console.log("x is the winner")
     } else if (comboTotal === -3){
-      return 'o wins'
+      winner = true
+      console.log("o is the winner")
     }
   })
 }
@@ -223,24 +236,34 @@ function checkForWinner(){
 //       `winner` to true.
 
 
-// 6.4 - `switchPlayerTurn`
+//  - `switchPlayerTurn`
 
-// 6.4a) Create a function called `switchPlayerTurn`.
+//  Create a function called `switchPlayerTurn`.
+function switchPlayerTurn(){
+  console.log("Called switchPlayerTurn()")
+  console.log("Current Turn: " + turn)
+  if (winner === true){
+    return
+  } else if (winner === false){
+      turn = turn * -1
+  }
+}
 
-// 6.4b) If `winner` is true, return out of the function - we don’t need 
+
+//  If `winner` is true, return out of the function - we don’t need 
 //       to switch the turn anymore!
 
-// 6.4c) If `winner` is false, change the turn by multiplying `turn` by 
+// If `winner` is false, change the turn by multiplying `turn` by 
 //       `-1` (this flips a `1` to `-1`, and vice-versa).
 
 
-// 6.5 - Tying it all together
+//  - Tying it all together
 
-// 6.5a) In our `handleClick` function, call `placePiece`, `checkForTie`, 
+// ) In our `handleClick` function, call `placePiece`, `checkForTie`, 
 //       `checkForWinner`, and `switchPlayerTurn`. Don’t forget that 
 //       `placePiece` needs `sqIdx` as an argument! 
 
-// 6.5b) Finally, now that all the state has been updated we need to 
+//  Finally, now that all the state has been updated we need to 
 //       render that updated state to the user by calling the `render` 
 //       function that we wrote earlier.
 
