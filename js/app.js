@@ -118,7 +118,7 @@ function updateMessage() {
   } else if (winner === false && tie === true){
     message = 'Tie Game aka cats game Mee-OWW 😸'
   } else {
-    message = 'Congratulations, player' + turn + ' WON!'
+    message = 'Congratulations, player' + turn + ' WON!🎉'
   }
   document.getElementById("message").textContent = message
 }
