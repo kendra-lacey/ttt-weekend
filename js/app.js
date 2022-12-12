@@ -40,11 +40,13 @@ let board, turn, winner, tie
 
 const squareEls = document.querySelectorAll('.sqr')
 const messageEl = "Player " + winner + " Wins!"
+// const resetBtnEl = document.getElementById("reset")
 
-document.querySelector('.board').addEventListener('click', handleClick)
 
 /*----------------------------- Event Listeners -----------------------------*/
+document.querySelector('.board').addEventListener('click', handleClick)
 
+document.getElementById("reset").addEventListener('click', reset)
 
 
 /*-------------------------------- Functions --------------------------------*/
@@ -59,6 +61,7 @@ document.querySelector('.board').addEventListener('click', handleClick)
 //  Set the `winner` to false.
 //  Set `tie` to false.
 //  Call a function called `render` at the end of the `init` function.
+
 function init(){
   console.log("Called init()")
   board = [null, null, null, null, null, null, null, null, null];
@@ -75,6 +78,7 @@ function init(){
 function render(){
 updateBoard()
 updateMessage()
+// reset()
 }
 
 //  Create a function called `updateBoard`.
@@ -259,26 +263,26 @@ function switchPlayerTurn(){
 
 //  - Tying it all together
 
-// ) In our `handleClick` function, call `placePiece`, `checkForTie`, 
+//  In our `handleClick` function, call `placePiece`, `checkForTie`, 
 //       `checkForWinner`, and `switchPlayerTurn`. Don’t forget that 
 //       `placePiece` needs `sqIdx` as an argument! 
 
-//  Finally, now that all the state has been updated we need to 
+// Finally, now that all the state has been updated we need to 
 //       render that updated state to the user by calling the `render` 
 //       function that we wrote earlier.
 
 // Step 7 - Create Reset functionality
 
-// 7a) Add a reset button to the HTML document.
+function reset(){
+  init()
+}
+
+//  Add a reset button to the HTML document.
 
 // 7b) Store the new reset button element as a cached element reference in
 //     a constant named `resetBtnEl`.
 
-// 7c) Attach an event listener to the `resetBtnEl`. On the `'click'` event 
-//     it should call the `init` function you created in step 3.
-
-
-
+// 7c) Attach an event listener to the `resetBtnEl`. On the `'click'` event
 
 
 init()
