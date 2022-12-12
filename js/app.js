@@ -39,7 +39,7 @@ let board, turn, winner, tie
 //  Attach an event listener to the game board
 
 const squareEls = document.querySelectorAll('.sqr')
-const messageEl = "Player " + winner + " Wins!"
+const messageEl = document.getElementById('message')
 
 
 /*----------------------------- Event Listeners -----------------------------*/
@@ -76,8 +76,8 @@ function init(){
 // inside of your `render` function.
 function render(){
   updateBoard()
+  messageEl.classList.remove('animate__animated', 'animate__heartBeat')
   updateMessage()
-  messageEl.add('animate__animated', 'animate__heartBeat')
 }
 
 //  Create a function called `updateBoard`.
@@ -90,7 +90,7 @@ function render(){
 //   `null`). To keep it simple, start with just putting a letter in 
 //    each square depending on what the the value of each cell is.
 function updateBoard(){
-  console.log("Called updateBoard()")
+  // console.log("Called updateBoard()")
   board.forEach((element, index) => {
     if (element === 'x'){
       squareEls[index].textContent = '❌' 
@@ -114,13 +114,14 @@ function updateMessage() {
   console.log("Called updateMessage()")
   console.log("Winner:" + winner)
   if(winner === false && tie === false){
-    message = "It is player " + turn + "'s turn."
+    message = `It is player ${turn === 1 ? "❌": "⭕️"} 's turn.`
   } else if (winner === false && tie === true){
     message = 'Tie Game aka cats game Mee-OWW 😸'
   } else {
     message = 'Congratulations, player' + turn + ' WON! 🎉'
   }
-  document.getElementById("message").textContent = message
+  messageEl.classList.add('animate__animated', 'animate__heartBeat')
+  messageEl.textContent = message
 }
 
 //   Handle a player clicking a square with a `handleClick` function
@@ -133,7 +134,7 @@ function updateMessage() {
 //  because that square is already taken. Also, if `winner` is not `null`
 //  immediately `return` because the game is over.
 function handleClick (evt){ // this runs anytime a single square is clicked
-  console.log("Called Render()")
+  // console.log("Called Render()")
   const sqIdx = evt.target.id.replace("sq", "")
   if (board[(sqIdx)] !== null) { // if it already has an x or an o in it, do nothing
     console.log("There's already something in that box")
@@ -163,7 +164,7 @@ function placePiece (idx){
   if(turn === -1){
     board[(idx)] = 'x' // change board at this index to x because it's player 0's turn
   }else if(turn === 1){
-    board[(idx)] = 'o' // change board at this index to x because it's player 1's turn
+    board[(idx)] = 'o' // change board at this index to o because it's player 1's turn
   }
 }
 
