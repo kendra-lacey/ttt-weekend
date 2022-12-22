@@ -93,9 +93,9 @@ function updateBoard(){
   // console.log("Called updateBoard()")
   board.forEach((element, index) => {
     if (element === 'x'){
-      squareEls[index].textContent = '❌' 
+      squareEls[index].textContent = '🐈' 
     }else if (element === 'o'){
-      squareEls[index].textContent = '⭕️'
+      squareEls[index].textContent = '🐈‍⬛'
     } else {
       squareEls[index].textContent = ''
     }
@@ -114,7 +114,7 @@ function updateMessage() {
   console.log("Called updateMessage()")
   console.log("Winner:" + winner)
   if(winner === false && tie === false){
-    message = `It is player ${turn === 1 ? "❌": "⭕️"} 's turn.`
+    message = `It is player ${turn === 1 ? "🐈": "🐈‍⬛"} 's turn.`
   } else if (winner === false && tie === true){
     message = 'Tie Game aka cats game Mee-OWW 😸'
   } else {
